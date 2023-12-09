@@ -61,12 +61,12 @@ export default function Home() {
   return (
     <div className="flex h-full items-center justify-center py-2">
       {loading ? (
-        <div>Loading...</div>
+        <div className="loading loading-infinity loading-lg"></div>
       ) : isSelectFile ? (
         <div className="flex h-full flex-col gap-y-8">
           <header className="flex justify-end">
             <button
-              className="rounded border px-2 hover:text-blue-800"
+              className="btn btn-outline btn-info btn-sm"
               onClick={resetHtml}
             >
               reset
@@ -78,7 +78,12 @@ export default function Home() {
           />
         </div>
       ) : (
-        <input type="file" onChange={handleSelectFile} />
+        <input
+          type="file"
+          accept=".md"
+          className="file-input file-input-bordered file-input-info w-full max-w-xs"
+          onChange={handleSelectFile}
+        />
       )}
     </div>
   );
