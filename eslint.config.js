@@ -5,4 +5,5 @@ export default config({
   react: {
     next: true,
   },
+  tailwindcss: true,
 });

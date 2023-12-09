@@ -1,4 +1,5 @@
-import "./globals.css";
+import "../styles/globals.css";
+import "highlight.js/styles/github.min.css";
 
 export const metadata = {
   title: "Create Next App",
@@ -11,7 +12,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en">
+    <html lang="en" className="light">
       <body>{children}</body>
     </html>
   );
