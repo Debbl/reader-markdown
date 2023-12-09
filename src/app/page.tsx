@@ -4,6 +4,7 @@ import type { ChangeEventHandler } from "react";
 import { useEffect, useState } from "react";
 import hljs from "highlight.js";
 import localforage from "localforage";
+import { useGitHubInfo } from "@debbl/ahooks";
 
 const md = markdownit({
   html: true,
@@ -24,6 +25,10 @@ export default function Home() {
   const [isSelectFile, setIsSelectFile] = useState(false);
   const [html, setHtml] = useState("");
   const [loading, setLoading] = useState(true);
+
+  const { GitHubInfo } = useGitHubInfo(
+    "https://github.com/Debbl/reader-markdown",
+  );
 
   useEffect(() => {
     localforage.getItem("html").then((html) => {
@@ -56,14 +61,15 @@ export default function Home() {
   const resetHtml = () => {
     setHtml("");
     setIsSelectFile(false);
+    localforage.removeItem("html");
   };
 
   return (
-    <div className="flex h-full items-center justify-center py-2">
+    <div className="relative flex h-full w-full items-center justify-center py-2">
       {loading ? (
         <div className="loading loading-infinity loading-lg"></div>
       ) : isSelectFile ? (
-        <div className="flex h-full flex-col gap-y-8">
+        <div className="flex h-full w-full flex-col gap-y-2 px-1 md:px-10 lg:px-32 xl:px-64">
           <header className="flex justify-end">
             <button
               className="btn btn-outline btn-info btn-sm"
@@ -72,10 +78,14 @@ export default function Home() {
               reset
             </button>
           </header>
-          <main
-            className="markdown-body flex-1 overflow-auto"
-            dangerouslySetInnerHTML={{ __html: html }}
-          />
+
+          <main className="w-full flex-1 overflow-auto">
+            <div
+              className="markdown-body"
+              dangerouslySetInnerHTML={{ __html: html }}
+            />
+            <GitHubInfo className="mb-2 mt-10 h-4" />
+          </main>
         </div>
       ) : (
         <input

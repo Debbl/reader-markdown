@@ -11,6 +11,7 @@
     "lint:fix": "eslint --fix ."
   },
   "dependencies": {
+    "@debbl/ahooks": "^0.0.10",
     "highlight.js": "^11.9.0",
     "localforage": "^1.10.0",
     "markdown-it": "^14.0.0",
