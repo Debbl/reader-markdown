@@ -1,13 +1,13 @@
 "use client";
-
 import { useGitHubInfo } from "@debbl/ahooks";
 import Link from "next/link";
-import { useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect } from "react";
 import { db } from "~/db";
 import { useParserMarkdown } from "~/hooks/useParserMarkdown";
 
 export default function Page() {
+  const router = useRouter();
   const searchParams = useSearchParams();
   const { html, isLoading, setContent, setIsLoading } = useParserMarkdown();
 
@@ -18,15 +18,21 @@ export default function Page() {
   useEffect(() => {
     (async function () {
       const id = searchParams.get("id");
-      if (!id) return;
+      if (!id) {
+        router.push("/");
+        return;
+      }
 
       const content = await db.content.where("id").equals(+id).first();
-      if (!content) return;
+      if (!content) {
+        router.push("/");
+        return;
+      }
 
       setContent(content.content);
       setIsLoading(false);
     })();
-  }, [searchParams, setContent, setIsLoading]);
+  }, [router, searchParams, setContent, setIsLoading]);
 
   return (
     <div className="relative flex h-full w-full items-center justify-center py-2">
