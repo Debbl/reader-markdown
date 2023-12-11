@@ -1,64 +1,72 @@
 "use client";
-import type { ChangeEventHandler } from "react";
-import { useGitHubInfo } from "@debbl/ahooks";
+import { type ChangeEventHandler, useEffect, useState } from "react";
+import Link from "next/link";
 import { readeFileContent } from "~/utils";
-import { useParserMarkdown } from "~/hooks/useParserMarkdown";
+import type { Content } from "~/db";
+import { db } from "~/db";
 
 export default function Home() {
-  const { html, isLoading, setContent, setIsLoading } = useParserMarkdown();
+  const [contentList, setContentList] = useState<Content[]>([]);
 
-  const { GitHubInfo } = useGitHubInfo(
-    "https://github.com/Debbl/reader-markdown",
-  );
-
-  const handleSelectFile: ChangeEventHandler<HTMLInputElement> = (e) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
-
-    setIsLoading(true);
-
-    readeFileContent(file).then((_content) => {
-      const content = _content?.toString() ?? "";
-      setContent(content);
-      setIsLoading(false);
-    });
+  const loadContentList = async () => {
+    const list = await db.content.toArray();
+    setContentList(list);
   };
 
-  const resetHtml = () => {
-    setContent("");
+  const handleSelectFile: ChangeEventHandler<HTMLInputElement> = async (e) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    const content = (await readeFileContent(file))?.toString() ?? "";
+    await db.content.add({
+      file: {
+        name: file.name,
+        size: file.size,
+        type: file.type,
+        lastModified: file.lastModified,
+        webkitRelativePath: file.webkitRelativePath,
+      },
+      content,
+    });
+    await loadContentList();
+  };
+
+  useEffect(() => {
+    loadContentList();
+  }, []);
+
+  const handleRemove = async (id?: number) => {
+    if (!id) return;
+
+    await db.content.delete(id);
+    await loadContentList();
   };
 
   return (
     <div className="relative flex h-full w-full items-center justify-center py-2">
-      {isLoading ? (
-        <div className="loading loading-infinity loading-lg"></div>
-      ) : html ? (
-        <div className="flex h-full w-full flex-col gap-y-2 overflow-auto px-1 md:px-10 lg:px-32 xl:px-64">
-          <header className="flex justify-end">
-            <button
-              className="btn btn-outline btn-info btn-sm"
-              onClick={resetHtml}
-            >
-              reset
-            </button>
-          </header>
+      <div className="flex flex-col gap-y-2">
+        {contentList.map((item) => (
+          <div
+            key={item.id}
+            className="flex justify-between hover:text-blue-600"
+          >
+            <Link href={`/content?id=${item.id}`}>
+              <span>{`${item.id}. `}</span>
+              {item.file.name}
+            </Link>
 
-          <main className="w-full flex-1 ">
-            <div
-              className="markdown-body"
-              dangerouslySetInnerHTML={{ __html: html }}
-            />
-            <GitHubInfo className="mb-2 mt-10 h-4" />
-          </main>
+            <button onClick={() => handleRemove(item.id)}>X</button>
+          </div>
+        ))}
+
+        <div className="mt-10">
+          <input
+            type="file"
+            accept=".md"
+            className="file-input file-input-bordered file-input-md w-full max-w-xs"
+            onChange={handleSelectFile}
+          />
         </div>
-      ) : (
-        <input
-          type="file"
-          accept=".md"
-          className="file-input file-input-bordered file-input-info w-full max-w-xs"
-          onChange={handleSelectFile}
-        />
-      )}
+      </div>
     </div>
   );
 }

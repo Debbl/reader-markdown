@@ -12,6 +12,7 @@
   },
   "dependencies": {
     "@debbl/ahooks": "^0.0.10",
+    "dexie": "^3.2.4",
     "highlight.js": "^11.9.0",
     "localforage": "^1.10.0",
     "markdown-it": "^14.0.0",
