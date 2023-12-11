@@ -69,7 +69,7 @@ export default function Home() {
       {loading ? (
         <div className="loading loading-infinity loading-lg"></div>
       ) : isSelectFile ? (
-        <div className="flex h-full w-full flex-col gap-y-2 px-1 md:px-10 lg:px-32 xl:px-64">
+        <div className="flex h-full w-full flex-col gap-y-2 overflow-auto px-1 md:px-10 lg:px-32 xl:px-64">
           <header className="flex justify-end">
             <button
               className="btn btn-outline btn-info btn-sm"
@@ -79,7 +79,7 @@ export default function Home() {
             </button>
           </header>
 
-          <main className="w-full flex-1 overflow-auto">
+          <main className="w-full flex-1 ">
             <div
               className="markdown-body"
               dangerouslySetInnerHTML={{ __html: html }}
