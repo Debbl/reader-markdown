@@ -1,7 +1,6 @@
 import markdownit from "markdown-it";
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import hljs from "highlight.js";
-import localforage from "localforage";
 
 const md = markdownit({
   html: true,
@@ -23,19 +22,6 @@ function useParserMarkdown() {
   const [isLoading, setIsLoading] = useState(true);
 
   const html = useMemo(() => md.render(content), [content]);
-
-  useEffect(() => {
-    localforage.getItem<string>("content").then((value) => {
-      if (value) {
-        setContent(value);
-      }
-      setIsLoading(false);
-    });
-  }, []);
-
-  useEffect(() => {
-    localforage.setItem("content", content);
-  }, [content]);
 
   return {
     isLoading,
