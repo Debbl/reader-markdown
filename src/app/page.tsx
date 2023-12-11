@@ -16,7 +16,9 @@ export default function Home() {
   const handleSelectFile: ChangeEventHandler<HTMLInputElement> = async (e) => {
     const file = e.target.files?.[0];
     if (!file) return;
+
     const content = (await readeFileContent(file))?.toString() ?? "";
+
     await db.content.add({
       file: {
         name: file.name,
@@ -28,6 +30,8 @@ export default function Home() {
       content,
     });
     await loadContentList();
+
+    e.target.value = "";
   };
 
   useEffect(() => {
