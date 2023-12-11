@@ -11,7 +11,7 @@ const md = markdownit({
   linkify: true,
   typographer: true,
   highlight(str, lang) {
-    if (!lang || hljs.getLanguage(lang)) return "";
+    if (!(lang && hljs.getLanguage(lang))) return "";
 
     try {
       return hljs.highlight(str, { language: lang }).value;
