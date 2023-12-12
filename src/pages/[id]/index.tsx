@@ -1,14 +1,12 @@
-"use client";
 import { useGitHubInfo } from "@debbl/ahooks";
 import Link from "next/link";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useRouter } from "next/router";
 import { useEffect } from "react";
 import { db } from "~/db";
 import { useParserMarkdown } from "~/hooks/useParserMarkdown";
 
 export default function Page() {
   const router = useRouter();
-  const searchParams = useSearchParams();
   const { html, isLoading, setContent, setIsLoading } = useParserMarkdown();
 
   const { GitHubInfo } = useGitHubInfo(
@@ -17,7 +15,7 @@ export default function Page() {
 
   useEffect(() => {
     (async function () {
-      const id = searchParams.get("id");
+      const id = router.query.id;
       if (!id) {
         router.push("/");
         return;
@@ -32,7 +30,7 @@ export default function Page() {
       setContent(content.content);
       setIsLoading(false);
     })();
-  }, [router, searchParams, setContent, setIsLoading]);
+  }, [router, setContent, setIsLoading]);
 
   return (
     <div className="relative flex h-full w-full items-center justify-center py-2">
