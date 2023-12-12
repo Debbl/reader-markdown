@@ -1,11 +1,10 @@
-"use client";
 import { type ChangeEventHandler, useEffect, useState } from "react";
 import Link from "next/link";
 import { readeFileContent } from "~/utils";
 import type { Content } from "~/db";
 import { db } from "~/db";
 
-export default function Home() {
+export default function Index() {
   const [contentList, setContentList] = useState<Content[]>([]);
 
   const loadContentList = async () => {
@@ -53,7 +52,7 @@ export default function Home() {
             key={item.id}
             className="flex justify-between hover:text-blue-600"
           >
-            <Link href={`/content?id=${item.id}`}>
+            <Link href={`/${item.id}`}>
               <span>{`${item.id}. `}</span>
               {item.file.name}
             </Link>
