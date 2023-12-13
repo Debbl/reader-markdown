@@ -23,13 +23,17 @@ function useParserMarkdown() {
 
   const html = useMemo(() => md.render(content), [content]);
 
-  return {
-    isLoading,
-    html,
-    content,
-    setContent,
-    setIsLoading,
-  };
+  return [
+    {
+      isLoading,
+      html,
+      content,
+    },
+    {
+      setContent,
+      setIsLoading,
+    },
+  ] as const;
 }
 
 export { useParserMarkdown };

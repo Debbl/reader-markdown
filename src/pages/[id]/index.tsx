@@ -7,7 +7,8 @@ import { useParserMarkdown } from "~/hooks/useParserMarkdown";
 
 export default function Page() {
   const router = useRouter();
-  const { html, isLoading, setContent, setIsLoading } = useParserMarkdown();
+  const [{ html, isLoading }, { setContent, setIsLoading }] =
+    useParserMarkdown();
 
   const { GitHubInfo } = useGitHubInfo(
     "https://github.com/Debbl/reader-markdown",
