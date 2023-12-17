@@ -16,13 +16,16 @@ export default function Page() {
 
   useEffect(() => {
     (async function () {
-      const id = router.query.id;
-      if (id) {
-        const content = await db.content.where("id").equals(+id).first();
-        content && setContent(content.content);
-      }
+      try {
+        const id = router.query.id;
 
-      setIsLoading(false);
+        if (id) {
+          const content = await db.content.where("id").equals(+id).first();
+          content && setContent(content.content);
+        }
+      } finally {
+        setIsLoading(false);
+      }
     })();
   }, [router, setContent, setIsLoading]);
 
