@@ -1,10 +1,11 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
 @import url(./markdown.css);
 
 html,
-body, 
+body,
 #__next {
   height: 100%;
 }

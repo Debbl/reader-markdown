@@ -40,12 +40,14 @@ export default function Page() {
               <button className="btn btn-sm">home</button>
             </Link>
           </header>
-          <main className="w-full flex-1 ">
+
+          <main className="w-full flex-1">
             <div
               className="markdown-body"
               dangerouslySetInnerHTML={{ __html: html }}
             />
           </main>
+
           <footer>
             <Link href="/" className="text-gray-600 underline">
               cd..
