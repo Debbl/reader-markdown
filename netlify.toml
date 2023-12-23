@@ -1,4 +1,10 @@
 [[redirects]]
+  from = "/favicon.svg"
+  to = "/favicon.svg"
+  status = 200
+  force = true
+
+[[redirects]]
   from = "/:id"
   to = "/[id].html"
   status = 200
